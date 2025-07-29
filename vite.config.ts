@@ -21,7 +21,7 @@ export default defineConfig({
         assetFileNames: `assets/[name].[ext]`
       }
     },
-    outDir: '~/idea-spark/dist',
+    outDir: '/Users/verne.zhong/Downloads/idea-spark/dist',
     emptyOutDir: true
   }
 })
