@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 w-80">
+  <div class="p-4 w-80" style="width: 320px; height: 400px;">
     <h1 class="text-lg font-bold mb-4">💡 IdeaBox</h1>
     <IdeaForm @add="addIdea" />
     <IdeaList :ideas="ideas" @remove="removeIdea" />
