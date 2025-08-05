@@ -1,0 +1,1 @@
+{"root":["./src/background.ts","./src/content.ts","./src/popup/app.vue","./src/popup/main.ts","./src/popup/components/ideaform.vue","./src/popup/components/idealist.vue","./src/utils/storage.ts"],"version":"5.8.3"}

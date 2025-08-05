@@ -1,27 +1,23 @@
 // vite.config.ts
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { fileURLToPath } from 'url'
-import { dirname, resolve } from 'path'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import {resolve} from 'path'
 
 export default defineConfig({
-  plugins: [vue()],
-  build: {
-    rollupOptions: {
-      input: {
-        popup: resolve(__dirname, 'src/popup/index.html'),
-        background: resolve(__dirname, 'src/background.ts')
-      },
-      output: {
-        entryFileNames: `assets/[name].js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`
-      }
-    },
-    outDir: '/Users/verne.zhong/Downloads/idea-spark/dist',
-    emptyOutDir: true
-  }
+    plugins: [vue()],
+    build: {
+        outDir: 'dist', // 输出到 dist 目录
+        rollupOptions: {
+            input: {
+                popup: resolve(__dirname, 'src/popup/index.html'),
+                background: resolve(__dirname, 'src/background.ts'),
+            },
+            output: {
+                entryFileNames: '[name].js',
+                chunkFileNames: '[name].js',
+                assetFileNames: '[name][extname]'
+            }
+        },
+        emptyOutDir: true
+    }
 })
