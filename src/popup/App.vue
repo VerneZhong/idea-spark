@@ -1,8 +1,18 @@
 <template>
-  <div class="p-4 w-80" style="width: 320px; height: 400px;">
-    <h1 class="text-lg font-bold mb-4">IdeaBox</h1>
-    <IdeaForm @add="addIdea" />
-    <IdeaList :ideas="ideas" @remove="removeIdea" />
+  <div class="app">
+    <h1>IdeaBox</h1>
+    <form>
+      <input type="text" placeholder="记录你的灵感..." />
+      <button type="submit">添加</button>
+    </form>
+    <hr />
+    <ul>
+      <li v-for="(idea, i) in ideas" :key="i">
+        {{ idea }}
+        <button @click="removeIdea(i)">✕</button>
+      </li>
+    </ul>
+    <p v-if="ideas.length === 0" class="empty">✨ 暂无想法，先写点东西吧~</p>
   </div>
 </template>
 

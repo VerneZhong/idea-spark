@@ -118,3 +118,18 @@ li button {
 li button:hover {
     transform: scale(1.2);
 }
+
+/* 分割线 */
+hr {
+    border: none;
+    border-top: 1px solid #e5e5ea;
+    margin: 16px 0;
+}
+
+/* 空状态 */
+.empty {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    margin-top: 20px;
+}
