@@ -1,20 +1,10 @@
 <template>
   <div class="app">
     <h1>IdeaBox</h1>
-<!--    <form>-->
-<!--      <input type="text" placeholder="记录你的灵感..." />-->
-<!--      <button type="submit">添加</button>-->
-<!--    </form>-->
 
     <IdeaForm @add="addIdea" />
 
     <hr />
-<!--    <ul>-->
-<!--      <li v-for="(idea, i) in ideas" :key="i">-->
-<!--        {{ idea }}-->
-<!--        <button @click="removeIdea(i)">✕</button>-->
-<!--      </li>-->
-<!--    </ul>-->
 
     <IdeaList :ideas="ideas" @remove="removeIdea" />
 
