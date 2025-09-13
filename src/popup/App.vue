@@ -24,15 +24,15 @@ onMounted(async () => {
   ideas.value = await loadIdeas()
 })
 
-function addIdea(text: string) {
+async function addIdea(text: string) {
   const newIdea = { id: Date.now(), text }
   ideas.value.unshift(newIdea)
-  saveIdeas(ideas.value)
+  await saveIdeas(ideas.value)
 }
 
-function removeIdea(id: number) {
+async function removeIdea(id: number) {
   ideas.value = ideas.value.filter(idea => idea.id !== id)
-  saveIdeas(ideas.value)
+  await saveIdeas(ideas.value)
 }
 </script>
 

@@ -1,10 +1,12 @@
 <template>
   <form @submit.prevent="submit">
-    <textarea
+    <input
         v-model="text"
-        rows="3"
-        class="w-full border rounded px-2 py-1 mb-2 resize-none"
+        type="text"
+        class="w-full border rounded-lg px-3 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         placeholder="记录你的灵感..."
+        @keydown.enter.exact.prevent="submit"
+        @keydown.shift.enter.prevent="text += '\n'"
     />
     <button
         type="submit"
@@ -22,6 +24,15 @@ import { ref, onMounted, nextTick } from 'vue'
 const text = ref('')
 const inputEl = ref<HTMLInputElement | null>(null)
 const emit = defineEmits(['add'])
+
+const textareaEl = ref<HTMLTextAreaElement | null>(null)
+
+function autoResize() {
+  if (textareaEl.value) {
+    textareaEl.value.style.height = "auto"
+    textareaEl.value.style.height = textareaEl.value.scrollHeight + "px"
+  }
+}
 
 function submit() {
   if (text.value.trim()) {
