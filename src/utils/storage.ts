@@ -10,11 +10,10 @@ const STORAGE_KEY = "ideas"
 /**
  * 读取存储的 ideas
  */
-export async function loadIdeas(): Promise<Idea[]> {
+export function loadIdeas(): Promise<Idea[]> {
     return new Promise((resolve) => {
-        chrome.storage.local.get(STORAGE_KEY, (result) => {
-            const ideas = result[STORAGE_KEY]
-            resolve(Array.isArray(ideas) ? ideas : [])
+        chrome.runtime.sendMessage({ type: "loadIdeas" }, (response) => {
+            resolve(Array.isArray(response?.data) ? response.data : [])
         })
     })
 }
@@ -22,9 +21,9 @@ export async function loadIdeas(): Promise<Idea[]> {
 /**
  * 保存 ideas
  */
-export async function saveIdeas(ideas: Idea[]): Promise<void> {
+export function saveIdeas(ideas: Idea[]): Promise<void> {
     return new Promise((resolve) => {
-        chrome.storage.local.set({ [STORAGE_KEY]: ideas }, () => {
+        chrome.runtime.sendMessage({ type: "saveIdeas", data: ideas }, () => {
             resolve()
         })
     })

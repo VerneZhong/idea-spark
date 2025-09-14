@@ -16,12 +16,13 @@
 import { ref, onMounted } from 'vue'
 import IdeaList from './components/IdeaList.vue'
 import IdeaForm from './components/IdeaForm.vue'
-import { loadIdeas, saveIdeas } from '../utils/storage'
+import { loadIdeas, saveIdeas, type Idea } from '../utils/storage'
 
-const ideas = ref<{ id: number, text: string }[]>([])
+const ideas = ref<Idea[]>([])
 
 onMounted(async () => {
   ideas.value = await loadIdeas()
+  console.log('加载到的数据:', ideas.value)
 })
 
 async function addIdea(text: string) {
