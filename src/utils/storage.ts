@@ -5,8 +5,6 @@ export interface Idea {
     text: string
 }
 
-const STORAGE_KEY = "ideas"
-
 /**
  * 读取存储的 ideas
  */
