@@ -8,7 +8,13 @@
 
     <IdeaList :ideas="ideas" @remove="removeIdea" />
 
-    <p v-if="ideas.length === 0" class="empty">✨ 暂无想法，先写点东西吧~</p>
+    <button
+        class="bg-green-500 text-white px-4 py-1 rounded w-full mt-2"
+        @click="exportAll"
+        :disabled="ideas.length === 0"
+    >
+      导出所有灵感
+    </button>
   </div>
 </template>
 
@@ -17,6 +23,7 @@ import { ref, onMounted } from 'vue'
 import IdeaList from './components/IdeaList.vue'
 import IdeaForm from './components/IdeaForm.vue'
 import { loadIdeas, saveIdeas, type Idea } from '../utils/storage'
+import {exportIdeas} from "../utils/export";
 
 const ideas = ref<Idea[]>([])
 
@@ -34,6 +41,10 @@ async function addIdea(text: string) {
 async function removeIdea(id: number) {
   ideas.value = ideas.value.filter(idea => idea.id !== id)
   await saveIdeas(ideas.value)
+}
+
+function exportAll() {
+  exportIdeas(ideas.value)
 }
 </script>
 
