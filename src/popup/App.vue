@@ -1,15 +1,21 @@
 <template>
-  <div class="app">
-    <h1>IdeaBox</h1>
+  <div class="p-4 w-80 bg-white rounded-lg shadow">
+    <!-- 标题 -->
+    <h1 class="text-lg font-bold flex items-center mb-4">IdeaBox</h1>
 
+    <!-- 输入区域 -->
     <IdeaForm @add="addIdea" />
 
-    <hr />
-
-    <IdeaList :ideas="ideas" @remove="removeIdea" />
+    <!-- 列表 -->
+    <div v-if="ideas.length > 0" class="mt-4">
+      <IdeaList :ideas="ideas" @remove="removeIdea" />
+    </div>
+    <p v-else class="text-gray-400 text-center mt-4">
+      ✨ 还没有灵感，快来添加吧！
+    </p>
 
     <button
-        class="bg-green-500 text-white px-4 py-1 rounded w-full mt-2"
+        class="w-full border border-gray-300 text-gray-600 text-sm py-2 rounded-lg hover:bg-gray-50 mt-4"
         @click="exportAll"
         :disabled="ideas.length === 0"
     >
