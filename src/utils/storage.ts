@@ -3,6 +3,7 @@
 export interface Idea {
     id: number
     text: string
+    createdAt: number
 }
 
 /**
@@ -25,17 +26,6 @@ export function saveIdeas(ideas: Idea[]): Promise<void> {
             resolve()
         })
     })
-}
-
-/**
- * 添加一个新的 idea
- */
-export async function addIdea(text: string): Promise<Idea[]> {
-    const ideas = await loadIdeas()
-    const newIdea: Idea = { id: Date.now(), text }
-    const updated = [...ideas, newIdea]
-    await saveIdeas(updated)
-    return updated
 }
 
 /**

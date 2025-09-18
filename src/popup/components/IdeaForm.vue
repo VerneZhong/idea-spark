@@ -1,10 +1,10 @@
 <template>
-  <form @submit.prevent="submit" class="flex gap-2">
+  <form @submit.prevent="submit" class="mb-4">
     <input
         v-model="text"
         ref="inputEl"
         type="text"
-        class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        class="w-full border-b border-gray-300 focus:border-black focus:outline-none py-2 text-sm"
         placeholder="记录你的灵感..."
     />
     <button
