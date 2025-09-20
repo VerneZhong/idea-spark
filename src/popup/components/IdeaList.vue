@@ -3,18 +3,23 @@
     <div
         v-for="idea in ideas"
         :key="idea.id"
-        class="py-3 flex items-center justify-between"
+        class="py-3 px-1 relative"
     >
-      <div class="flex-1">
-        <p class="text-sm text-gray-800 break-words">{{ idea.text }}</p>
-        <p class="text-xs text-gray-400 mt-1">{{ formatDate(idea.createdAt) }}</p>
-      </div>
+      <!-- 删除按钮固定在右上角 -->
       <button
           @click="$emit('remove', idea.id)"
-          class="ml-2 text-gray-400 hover:text-red-500 text-sm"
+          class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-sm"
       >
         ✕
       </button>
+
+      <!-- 文本内容 -->
+      <p class="text-sm text-gray-800 break-words pr-6">
+        {{ idea.text }}
+      </p>
+
+      <!-- 日期 -->
+      <p class="text-xs text-gray-400 mt-1">{{ formatDate(idea.createdAt) }}</p>
     </div>
   </div>
 </template>
