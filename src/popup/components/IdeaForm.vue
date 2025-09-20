@@ -1,24 +1,26 @@
 <template>
   <form @submit.prevent="submit" class="mb-4">
-    <input
-        v-model="text"
-        ref="inputEl"
-        type="text"
-        class="w-full border-b border-gray-300 focus:border-black focus:outline-none py-2 text-sm"
-        placeholder="记录你的灵感..."
-    />
-    <button
-        type="submit"
-        class="bg-blue-500 text-white px-3 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-        :disabled="!text.trim()"
-    >
-      添加
-    </button>
+    <div class="flex items-center gap-2">
+      <input
+          v-model="text"
+          type="text"
+          placeholder="记录你的灵感..."
+          class="flex-1 border-b border-gray-300 focus:border-black focus:outline-none py-2 text-sm placeholder-gray-400"
+          ref="inputEl"
+      />
+      <button
+          type="submit"
+          class="px-3 py-1 rounded bg-blue-500 text-white text-sm hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed"
+          :disabled="!text.trim()"
+      >
+        添加
+      </button>
+    </div>
   </form>
 </template>
-<input ref="inputEl" v-model="text" ... />
+<input ref="inputEl" v-model="text" .../>
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import {ref, onMounted, nextTick} from 'vue'
 
 const text = ref('')
 const inputEl = ref<HTMLInputElement | null>(null)

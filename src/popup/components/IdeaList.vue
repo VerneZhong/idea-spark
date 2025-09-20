@@ -3,16 +3,18 @@
     <div
         v-for="idea in ideas"
         :key="idea.id"
-        class="flex justify-between items-center py-2"
+        class="py-3 flex items-center justify-between"
     >
-      <span class="text-sm text-gray-800 break-words">{{ idea.text }}</span>
+      <div class="flex-1">
+        <p class="text-sm text-gray-800 break-words">{{ idea.text }}</p>
+        <p class="text-xs text-gray-400 mt-1">{{ formatDate(idea.createdAt) }}</p>
+      </div>
       <button
           @click="$emit('remove', idea.id)"
-          class="text-gray-400 hover:text-red-500 text-sm px-2"
+          class="ml-2 text-gray-400 hover:text-red-500 text-sm"
       >
         ✕
       </button>
-      <p class="text-xs text-gray-400 mt-1">{{ formatDate(idea.createdAt) }}</p>
     </div>
   </div>
 </template>

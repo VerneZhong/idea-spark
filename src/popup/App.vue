@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 w-80 bg-white font-sans">
+  <div class="p-5 w-80 bg-white font-sans">
     <!-- 标题 -->
     <h1 class="text-xl font-semibold mb-4">📝 IdeaBox</h1>
 
