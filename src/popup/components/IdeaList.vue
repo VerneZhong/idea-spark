@@ -13,8 +13,23 @@
         ✕
       </button>
 
-      <!-- 文本内容 -->
-      <p class="text-sm text-gray-800 break-words pr-6">
+      <!-- 编辑状态 -->
+      <textarea
+          v-if="idea.editing"
+          v-model="idea.text"
+          class="w-full text-sm border rounded p-1 pr-6"
+          @blur="finishEdit(idea)"
+          @keyup.enter.exact.prevent="finishEdit(idea)"
+      />
+
+      <!-- 普通显示（折叠 + 展开） -->
+      <p
+          v-else
+          class="text-sm text-gray-800 break-words pr-6 cursor-pointer"
+          :class="{ 'line-clamp-2': !idea.expanded }"
+          @click="toggleExpand(idea)"
+          @dblclick="startEdit(idea)"
+      >
         {{ idea.text }}
       </p>
 
@@ -25,8 +40,20 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{ ideas: { id: number, text: string, createdAt: number }[] }>()
+import { nextTick } from "vue"
 
+// Props
+const props = defineProps<{
+  ideas: { id: number; text: string; createdAt: number; expanded?: boolean; editing?: boolean }[];
+}>()
+
+// Emits
+const emit = defineEmits<{
+  (e: "remove", id: number): void
+  (e: "update", idea: { id: number; text: string; createdAt: number }): void
+}>()
+
+// 日期格式化
 function formatDate(ts: number) {
   if (ts) {
     const d = new Date(ts)
@@ -39,9 +66,38 @@ function formatDate(ts: number) {
 
     if (isToday) return "今天"
     if (isYesterday) return "昨天"
-
     return d.toISOString().split("T")[0] // YYYY-MM-DD
   }
-  return "";
+  return ""
+}
+
+// 折叠/展开
+function toggleExpand(idea: any) {
+  idea.expanded = !idea.expanded
+}
+
+// 开始编辑
+function startEdit(idea: any) {
+  idea.editing = true
+  nextTick(() => {
+    const textarea = document.querySelector("textarea")
+    textarea?.focus()
+  })
+}
+
+// 结束编辑
+function finishEdit(idea: any) {
+  idea.editing = false
+  emit("update", idea) // 通知父组件更新
 }
 </script>
+
+<style>
+/* 限制两行，多余部分省略 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

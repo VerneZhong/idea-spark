@@ -6,8 +6,10 @@
     <!-- 输入 -->
     <IdeaForm @add="addIdea" />
 
+    <hr class="my-2" />
+
     <!-- 列表 -->
-    <IdeaList :ideas="ideas" @remove="removeIdea" />
+    <IdeaList :ideas="ideas" @remove="removeIdea" @update="updateIdea" />
 
     <!-- 空状态 -->
     <p v-if="ideas.length === 0" class="text-gray-400 text-center text-sm mt-6">
@@ -17,7 +19,7 @@
     <!-- 导出 -->
     <div class="mt-6 text-center">
       <button
-          class="text-gray-500 text-sm hover:text-black"
+          class="bg-green-500 text-white px-4 py-1 rounded w-full mt-3 hover:bg-green-600"
           @click="exportAll"
           :disabled="ideas.length === 0"
       >
@@ -54,5 +56,13 @@ async function removeIdea(id: number) {
 
 function exportAll() {
   exportIdeas(ideas.value)
+}
+
+async function updateIdea(updated: Idea) {
+  const index = ideas.value.findIndex((i) => i.id === updated.id)
+  if (index !== -1) {
+    ideas.value[index] = { ...ideas.value[index], ...updated }
+    await saveIdeas(ideas.value)
+  }
 }
 </script>
