@@ -7,6 +7,7 @@
     >
       <!-- 删除按钮固定在右上角 -->
       <button
+          v-if="!idea.editing"
           @click="$emit('remove', idea.id)"
           class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-sm"
       >
