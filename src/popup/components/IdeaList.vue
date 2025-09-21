@@ -5,42 +5,49 @@
         :key="idea.id"
         class="py-3 px-1 relative"
     >
-      <!-- 删除按钮固定在右上角 -->
-      <button
-          v-if="!idea.editing"
-          @click="$emit('remove', idea.id)"
-          class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-sm"
-      >
-        ✕
-      </button>
+      <!-- 右上角按钮区 -->
+      <div class="absolute top-2 right-2 flex gap-2">
+        <!-- 普通模式：删除 -->
+        <button
+            v-if="!idea.editing"
+            @click="$emit('remove', idea.id)"
+            class="text-gray-400 hover:text-red-500 text-sm transition transform hover:scale-110"
+            title="删除"
+        >
+          ✕
+        </button>
 
-      <!-- 编辑状态 -->
-      <div v-if="idea.editing" class="flex flex-col gap-2">
-        <textarea
-            v-model="idea.text"
-            class="w-full text-sm border rounded p-2 pr-6 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            rows="3"
-        />
-        <div class="flex justify-end gap-2">
+        <!-- 编辑模式：取消 / 保存 -->
+        <template v-else>
           <button
               @click="cancelEdit(idea)"
-              class="px-3 py-1 text-sm border rounded text-gray-500 hover:bg-gray-100"
+              class="text-gray-400 hover:text-red-500 text-lg transition transform hover:scale-110"
+              title="取消"
           >
-            取消
+            ❌
           </button>
           <button
               @click="finishEdit(idea)"
-              class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+              class="text-green-500 hover:text-green-700 text-lg transition transform hover:scale-110"
+              title="保存"
           >
-            保存
+            ✅
           </button>
-        </div>
+        </template>
       </div>
+
+      <!-- 编辑状态 -->
+      <textarea
+          v-if="idea.editing"
+          v-model="idea.text"
+          class="w-full text-sm border rounded p-2 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          rows="3"
+      />
 
       <!-- 普通显示（折叠 + 展开） -->
       <p
           v-else
-          class="text-sm text-gray-800 break-words pr-6 cursor-pointer"
+          class="text-sm text-gray-800 break-words pr-20 cursor-pointer"
           :class="{ 'line-clamp-2': !idea.expanded }"
           @click="toggleExpand(idea)"
           @dblclick="startEdit(idea)"
