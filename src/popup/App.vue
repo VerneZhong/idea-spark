@@ -21,13 +21,18 @@
     </div>
 
     <!-- 底部导出按钮 -->
-    <div class="p-4 border-t border-gray-200">
+    <div class="p-4 border-t border-gray-200 flex gap-2">
+      <select v-model="exportFormat" class="flex-1 border rounded-md px-2 py-1 text-sm">
+        <option value="json">JSON</option>
+        <option value="markdown">Markdown</option>
+        <option value="txt">TXT</option>
+      </select>
       <button
-          class="w-full py-2 text-sm font-medium bg-green-500 text-white rounded-md hover:bg-green-600 transition"
           @click="exportAll"
+          class="px-3 py-2 text-sm font-medium bg-green-500 text-white rounded-md hover:bg-green-600 transition"
           :disabled="ideas.length === 0"
       >
-        ⬇️ 导出所有灵感
+        ⬇️ 导出
       </button>
     </div>
   </div>
@@ -41,6 +46,7 @@ import { loadIdeas, saveIdeas, type Idea } from '../utils/storage'
 import {exportIdeas} from "../utils/export";
 
 const ideas = ref<Idea[]>([])
+const exportFormat = ref<'json' | 'markdown' | 'txt'>('json')
 
 onMounted(async () => {
   ideas.value = await loadIdeas()
@@ -59,6 +65,6 @@ async function removeIdea(id: number) {
 }
 
 function exportAll() {
-  exportIdeas(ideas.value)
+  exportIdeas(ideas.value, exportFormat.value)
 }
 </script>
