@@ -20,20 +20,41 @@
       <IdeaList :ideas="ideas" @remove="removeIdea" />
     </div>
 
-    <!-- 底部导出按钮 -->
-    <div class="p-4 border-t border-gray-200 flex gap-2">
-      <select v-model="exportFormat" class="flex-1 border rounded-md px-2 py-1 text-sm">
-        <option value="json">JSON</option>
-        <option value="markdown">Markdown</option>
-        <option value="txt">TXT</option>
-      </select>
-      <button
-          @click="exportAll"
-          class="px-3 py-2 text-sm font-medium bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-          :disabled="ideas.length === 0"
-      >
-        ⬇️ 导出
-      </button>
+    <!-- 工具栏 -->
+    <div class="flex justify-end mt-3">
+      <!-- 分裂按钮 -->
+      <div class="relative inline-flex">
+        <!-- 主按钮：默认导出 Markdown -->
+        <button
+            @click="exportAll('markdown')"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-l-md text-gray-700 text-sm hover:bg-gray-100 shadow-sm transition"
+        >
+          ⬇️ 导出
+        </button>
+
+        <!-- 分裂按钮右侧箭头 -->
+        <button
+            @click="toggleDropdown"
+            class="px-2 bg-white border border-gray-300 border-l-0 rounded-r-md text-gray-500 text-sm hover:bg-gray-100 shadow-sm transition"
+        >
+          ▼
+        </button>
+
+        <!-- 下拉菜单 -->
+        <div
+            v-if="dropdownOpen"
+            class="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+        >
+          <button
+              v-for="fmt in formats"
+              :key="fmt.value"
+              @click="selectFormat(fmt.value)"
+              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition"
+          >
+            {{ fmt.label }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +67,22 @@ import { loadIdeas, saveIdeas, type Idea } from '../utils/storage'
 import {exportIdeas} from "../utils/export";
 
 const ideas = ref<Idea[]>([])
-const exportFormat = ref<'json' | 'markdown' | 'txt'>('json')
+// 下拉状态
+const dropdownOpen = ref(false)
+const formats = [
+  { label: 'Markdown', value: 'markdown' },
+  { label: 'JSON', value: 'json' },
+  { label: 'TXT', value: 'txt' }
+]
+
+function toggleDropdown() {
+  dropdownOpen.value = !dropdownOpen.value
+}
+
+function selectFormat(fmt: string) {
+  dropdownOpen.value = false
+  exportAll(fmt)
+}
 
 onMounted(async () => {
   ideas.value = await loadIdeas()
@@ -64,7 +100,8 @@ async function removeIdea(id: number) {
   await saveIdeas(ideas.value)
 }
 
-function exportAll() {
-  exportIdeas(ideas.value, exportFormat.value)
+function exportAll(fmt: string) {
+  if (ideas.value.length === 0) return
+  exportIdeas(ideas.value, fmt)
 }
 </script>

@@ -1,9 +1,6 @@
 import type { Idea } from "./storage"
 
-export function exportIdeas(
-    ideas: Idea[],
-    format: 'json' | 'markdown' | 'txt' = 'json'
-) {
+export function exportIdeas(ideas: Idea[], format: string = 'markdown') {
     let content = ''
     let filename = 'ideas'
 
