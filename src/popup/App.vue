@@ -1,25 +1,29 @@
 <template>
-  <div class="p-5 w-80 bg-white font-sans">
+  <div class="w-80 h-[480px] flex flex-col bg-white rounded-lg shadow-md">
     <!-- 标题 -->
-    <h1 class="text-xl font-semibold mb-4">📝 IdeaBox</h1>
+    <h1 class="flex items-center text-lg font-bold px-4 pt-4 pb-2">
+      📝 IdeaBox
+    </h1>
 
-    <!-- 输入 -->
-    <IdeaForm @add="addIdea" />
+    <!-- 输入区 -->
+    <div class="px-4 pb-3 border-b border-gray-200">
+      <IdeaForm @add="addIdea" />
+    </div>
 
-    <hr class="my-2" />
+    <!-- 列表区（可滚动） -->
+    <div class="flex-1 overflow-y-auto px-4">
+      <!-- 空状态 -->
+      <p v-if="ideas.length === 0" class="text-gray-400 text-center text-sm mt-6">
+        ✨ 还没有灵感，快来添加吧！
+      </p>
 
-    <!-- 列表 -->
-    <IdeaList :ideas="ideas" @remove="removeIdea" @update="updateIdea" />
+      <IdeaList :ideas="ideas" @remove="removeIdea" />
+    </div>
 
-    <!-- 空状态 -->
-    <p v-if="ideas.length === 0" class="text-gray-400 text-center text-sm mt-6">
-      ✨ 还没有灵感，快来添加吧！
-    </p>
-
-    <!-- 导出 -->
-    <div class="mt-6 text-center">
+    <!-- 底部导出按钮 -->
+    <div class="p-4 border-t border-gray-200">
       <button
-          class="bg-green-500 text-white px-4 py-1 rounded w-full mt-3 hover:bg-green-600"
+          class="w-full py-2 text-sm font-medium bg-green-500 text-white rounded-md hover:bg-green-600 transition"
           @click="exportAll"
           :disabled="ideas.length === 0"
       >
@@ -56,13 +60,5 @@ async function removeIdea(id: number) {
 
 function exportAll() {
   exportIdeas(ideas.value)
-}
-
-async function updateIdea(updated: Idea) {
-  const index = ideas.value.findIndex((i) => i.id === updated.id)
-  if (index !== -1) {
-    ideas.value[index] = { ...ideas.value[index], ...updated }
-    await saveIdeas(ideas.value)
-  }
 }
 </script>
