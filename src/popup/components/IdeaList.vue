@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ideas.length > 0" class="divide-y divide-gray-200 border-t border-b border-gray-200">
+  <div v-if="ideas.length > 0" class="divide-y divide-gray-200">
     <div
         v-for="idea in ideas"
         :key="idea.id"
