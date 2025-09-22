@@ -11,7 +11,7 @@
         <button
             v-if="!idea.editing"
             @click="$emit('remove', idea.id)"
-            class="text-gray-400 hover:text-red-500 text-sm transition transform hover:scale-110"
+            class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-600 transition transform hover:scale-110 shadow-sm"
             title="删除"
         >
           ✕
@@ -21,14 +21,14 @@
         <template v-else>
           <button
               @click="cancelEdit(idea)"
-              class="text-gray-400 hover:text-red-500 text-lg transition transform hover:scale-110"
+              class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-600 transition transform hover:scale-110 shadow-sm"
               title="取消"
           >
             ❌
           </button>
           <button
               @click="finishEdit(idea)"
-              class="text-green-500 hover:text-green-700 text-lg transition transform hover:scale-110"
+              class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-green-500 hover:bg-green-100 hover:text-green-700 transition transform hover:scale-110 shadow-sm"
               title="保存"
           >
             ✅
@@ -83,11 +83,8 @@ function formatDate(ts: number) {
     const yesterday = new Date()
     yesterday.setDate(today.getDate() - 1)
 
-    const isToday = d.toDateString() === today.toDateString()
-    const isYesterday = d.toDateString() === yesterday.toDateString()
-
-    if (isToday) return "今天"
-    if (isYesterday) return "昨天"
+    if (d.toDateString() === today.toDateString()) return "今天"
+    if (d.toDateString() === yesterday.toDateString()) return "昨天"
     return d.toISOString().split("T")[0] // YYYY-MM-DD
   }
   return ""
@@ -100,6 +97,7 @@ function toggleExpand(idea: any) {
 
 // 开始编辑
 function startEdit(idea: any) {
+  idea.originalText = idea.text
   idea.editing = true
   nextTick(() => {
     const textarea = document.querySelector("textarea")
@@ -114,6 +112,9 @@ function cancelEdit(idea: any) {
 
 // 结束编辑
 function finishEdit(idea: any) {
+  if (!idea.text.trim()) {
+    idea.text = idea.originalText // 避免保存空白
+  }
   idea.editing = false
   emit("update", idea) // 通知父组件更新
 }
