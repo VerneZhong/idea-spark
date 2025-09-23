@@ -21,7 +21,7 @@
     </div>
 
     <!-- 工具栏 -->
-    <div class="flex justify-end mt-3">
+    <div class="flex justify-end mt-3 relative" ref="dropdownWrapper">
       <!-- 分裂按钮 -->
       <div class="relative inline-flex">
         <!-- 主按钮：默认导出 Markdown -->
@@ -43,15 +43,16 @@
         <!-- 下拉菜单 -->
         <div
             v-if="dropdownOpen"
-            class="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+            class="absolute right-0 mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
         >
           <button
               v-for="fmt in formats"
               :key="fmt.value"
               @click="selectFormat(fmt.value)"
-              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition"
+              class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition"
           >
-            {{ fmt.label }}
+            <span>{{ fmt.icon }}</span>
+            <span>{{ fmt.label }}</span>
           </button>
         </div>
       </div>
@@ -60,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import IdeaList from './components/IdeaList.vue'
 import IdeaForm from './components/IdeaForm.vue'
 import { loadIdeas, saveIdeas, type Idea } from '../utils/storage'
@@ -69,10 +70,11 @@ import {exportIdeas} from "../utils/export";
 const ideas = ref<Idea[]>([])
 // 下拉状态
 const dropdownOpen = ref(false)
+const dropdownWrapper = ref<HTMLElement | null>(null)
 const formats = [
-  { label: 'Markdown', value: 'markdown' },
-  { label: 'JSON', value: 'json' },
-  { label: 'TXT', value: 'txt' }
+  { label: 'Markdown', value: 'markdown', icon: '📝' },
+  { label: 'JSON', value: 'json', icon: '📄' },
+  { label: 'TXT', value: 'txt', icon: '📜' }
 ]
 
 function toggleDropdown() {
@@ -104,4 +106,18 @@ function exportAll(fmt: string) {
   if (ideas.value.length === 0) return
   exportIdeas(ideas.value, fmt)
 }
+
+// 点击外部关闭菜单
+function handleClickOutside(event: MouseEvent) {
+  if (dropdownWrapper.value && !dropdownWrapper.value.contains(event.target as Node)) {
+    dropdownOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
