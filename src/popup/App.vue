@@ -20,6 +20,7 @@
       <IdeaList :ideas="ideas" @remove="removeIdea" />
     </div>
 
+    <!-- 底部按钮区 -->
     <IdeaTool :ideas="ideas" />
   </div>
 </template>

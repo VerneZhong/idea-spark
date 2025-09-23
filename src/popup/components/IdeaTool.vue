@@ -20,26 +20,35 @@
       </button>
 
       <!-- 下拉菜单 -->
-      <div
-          v-if="dropdownOpen"
-          class="absolute right-0 mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+      <transition
+          enter-active-class="transition ease-out duration-200"
+          enter-from-class="opacity-0 scale-95 -translate-y-1"
+          enter-to-class="opacity-100 scale-100 translate-y-0"
+          leave-active-class="transition ease-in duration-150"
+          leave-from-class="opacity-100 scale-100 translate-y-0"
+          leave-to-class="opacity-0 scale-95 -translate-y-1"
       >
-        <button
-            v-for="fmt in formats"
-            :key="fmt.value"
-            @click="selectFormat(fmt.value)"
-            class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition"
+        <div
+            v-if="dropdownOpen"
+            class="absolute right-0 mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
         >
-          <span>{{ fmt.icon }}</span>
-          <span>{{ fmt.label }}</span>
-        </button>
-      </div>
+          <button
+              v-for="fmt in formats"
+              :key="fmt.value"
+              @click="selectFormat(fmt.value)"
+              class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition"
+          >
+            <span>{{ fmt.icon }}</span>
+            <span>{{ fmt.label }}</span>
+          </button>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import {ref, onMounted, onBeforeUnmount} from 'vue'
-import { type Idea } from '../../utils/storage'
+import {type Idea} from '../../utils/storage'
 import {exportIdeas} from "../../utils/export";
 
 const props = defineProps<{ ideas: Idea[] }>()
