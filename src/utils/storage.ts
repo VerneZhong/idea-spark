@@ -27,13 +27,3 @@ export function saveIdeas(ideas: Idea[]): Promise<void> {
         })
     })
 }
-
-/**
- * 删除一个 idea
- */
-export async function removeIdea(id: number): Promise<Idea[]> {
-    const ideas = await loadIdeas()
-    const updated = ideas.filter((idea) => idea.id !== id)
-    await saveIdeas(updated)
-    return updated
-}
