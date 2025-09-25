@@ -21,7 +21,7 @@
     </div>
 
     <!-- 底部按钮区 -->
-    <IdeaTool :ideas="ideas" />
+    <IdeaTool v-model:ideas="ideas" />
   </div>
 </template>
 

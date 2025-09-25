@@ -1,13 +1,22 @@
 <template>
   <!-- 工具栏 -->
   <div class="flex justify-end mt-3 relative" ref="dropdownWrapper">
-    <!-- 导入按钮 -->
-    <button
-        @click="triggerImport"
-        class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 text-sm hover:bg-gray-100 shadow-sm transition"
-    >
-      📂 导入
-    </button>
+    <!-- 左侧：导入 + 清空 -->
+    <div class="flex gap-3">
+      <button
+          @click="triggerImport"
+          class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 text-sm hover:bg-gray-100 shadow-sm transition"
+      >
+        📂 导入
+      </button>
+
+      <button
+          @click="clearAll"
+          class="px-4 py-2 bg-red-500 text-white rounded-md text-sm hover:bg-red-600 shadow-sm transition"
+      >
+        🗑️ 清空
+      </button>
+    </div>
     <!-- 分裂按钮 -->
     <div class="relative inline-flex">
       <!-- 主按钮：默认导出 Markdown -->
@@ -148,6 +157,13 @@ async function handleImport(event: Event) {
 
   // 清空 input，避免重复选择同一文件时不触发 change
   input.value = ""
+}
+
+// 清空所有数据
+async function clearAll() {
+  if (!confirm("确定要清空所有数据吗？")) return
+  await saveIdeas([])
+  emit("update:ideas", [])
 }
 
 onMounted(() => {
