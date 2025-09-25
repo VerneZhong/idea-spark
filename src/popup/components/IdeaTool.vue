@@ -1,6 +1,13 @@
 <template>
   <!-- 工具栏 -->
   <div class="flex justify-end mt-3 relative" ref="dropdownWrapper">
+    <!-- 导入按钮 -->
+    <button
+        @click="triggerImport"
+        class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 text-sm hover:bg-gray-100 shadow-sm transition"
+    >
+      📂 导入
+    </button>
     <!-- 分裂按钮 -->
     <div class="relative inline-flex">
       <!-- 主按钮：默认导出 Markdown -->
@@ -44,17 +51,27 @@
         </div>
       </transition>
     </div>
+    <!-- 隐藏的文件选择框 -->
+    <input
+        type="file"
+        ref="fileInput"
+        accept=".md"
+        class="hidden"
+        @change="handleImport"
+    />
   </div>
 </template>
 <script setup lang="ts">
 import {ref, onMounted, onBeforeUnmount} from 'vue'
-import {type Idea} from '../../utils/storage'
+import {saveIdeas, type Idea} from '../../utils/storage'
 import {exportIdeas} from "../../utils/export";
 
 const props = defineProps<{ ideas: Idea[] }>()
+const emit = defineEmits(["update:ideas"]) // 通知父组件更新
 // 下拉状态
 const dropdownOpen = ref(false)
 const dropdownWrapper = ref<HTMLElement | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
 const formats = [
   {label: 'Markdown', value: 'markdown', icon: '📝'},
   {label: 'JSON', value: 'json', icon: '📄'},
@@ -80,6 +97,57 @@ function handleClickOutside(event: MouseEvent) {
   if (dropdownWrapper.value && !dropdownWrapper.value.contains(event.target as Node)) {
     dropdownOpen.value = false
   }
+}
+
+function triggerImport() {
+  fileInput.value?.click()
+}
+
+async function handleImport(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+
+  const reader = new FileReader()
+  reader.onload = async (e) => {
+    const text = e.target?.result as string
+    console.log("读取到的 MD:", text)
+
+    const lines = text.split("\n")
+
+    const newIdeas: Idea[] = []
+    let currentTitle = ""
+
+    lines.forEach((line, idx) => {
+      line = line.trim()
+      if (!line) return
+
+      if (line.startsWith("###")) {
+        // 语法点标题
+        currentTitle = line.replace(/^#+\s*/, "")
+      } else if (line.startsWith("-")) {
+        // 例句或解释，跟随最近的标题
+        const ideaText = currentTitle
+            ? `${currentTitle}\n${line.replace(/^-+\s*/, "")}`
+            : line.replace(/^-+\s*/, "")
+
+        newIdeas.push({
+          id: Date.now() + idx,
+          text: ideaText,
+          createdAt: Date.now()
+        })
+      }
+    })
+
+    console.log("生成的 ideas:", newIdeas)
+
+    await saveIdeas(newIdeas)
+    emit("update:ideas", newIdeas)
+  }
+  reader.readAsText(file)
+
+  // 清空 input，避免重复选择同一文件时不触发 change
+  input.value = ""
 }
 
 onMounted(() => {
