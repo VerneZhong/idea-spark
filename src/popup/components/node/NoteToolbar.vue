@@ -22,6 +22,7 @@
 import { ref } from "vue"
 import { saveNotes, type Note } from "../../../utils/storage"
 import { exportNotes } from "../../../utils/export"
+import { importMarkdown } from "../../../utils/import"
 
 const props = defineProps<{ notes: Note[] }>()
 const emit = defineEmits(["update:notes"])
@@ -37,48 +38,12 @@ async function handleImport(event: Event) {
   const file = input.files?.[0]
   if (!file) return
 
-  const reader = new FileReader()
-  reader.onload = async (e) => {
-    const text = e.target?.result as string
-    const notes: Note[] = []
+  const newNotes = await importMarkdown(file)
 
-    let currentTitle = ""
-    let buffer: string[] = []
+  await saveNotes(newNotes)
+  emit("update:notes", newNotes)
 
-    text.split("\n").forEach((line, idx) => {
-      if (line.startsWith("###")) {
-        // 遇到新标题 → 把之前的内容存成一个 Note
-        if (currentTitle || buffer.length) {
-          notes.push({
-            id: Date.now() + idx,
-            title: currentTitle,
-            content: buffer.join("\n"),
-            createdAt: Date.now(),
-          })
-        }
-        currentTitle = line.replace(/^#+\s*/, "")
-        buffer = []
-      } else {
-        buffer.push(line.trim())
-      }
-    })
-
-    // 收尾：最后一个 Note
-    if (currentTitle || buffer.length) {
-      notes.push({
-        id: Date.now(),
-        title: currentTitle,
-        content: buffer.join("\n"),
-        createdAt: Date.now(),
-      })
-    }
-
-    await saveNotes(notes)
-    emit("update:notes", notes)
-  }
-  reader.readAsText(file)
-
-  input.value = "" // 允许重复选择
+  input.value = "" // 清空 input，避免同一文件不能重复导入
 }
 
 function clearAll() {

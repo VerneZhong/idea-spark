@@ -10,9 +10,9 @@
         <p class="font-medium text-gray-800 truncate">{{ note.title }}</p>
         <p class="text-xs text-gray-400">{{ formatDate(note.createdAt) }}</p>
       </div>
+      <p class="text-sm text-gray-500 truncate mt-1">{{ note.content }}</p>
     </div>
   </div>
-  <p v-else class="text-center text-gray-400 py-6">暂无笔记</p>
 </template>
 
 <script setup lang="ts">
