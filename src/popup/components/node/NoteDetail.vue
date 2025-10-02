@@ -6,6 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Note } from "../../utils/storage"
+import type { Note } from "../../../utils/storage.ts"
 defineProps<{ note: Note | null }>()
 </script>
