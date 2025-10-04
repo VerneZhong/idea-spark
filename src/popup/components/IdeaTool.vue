@@ -76,8 +76,8 @@
 </template>
 <script setup lang="ts">
 import {ref, onMounted, onBeforeUnmount} from 'vue'
-import {saveIdeas, type Idea} from '../../../utils/storage'
-import {exportIdeas} from "../../../utils/export";
+import {saveIdeas, type Idea} from '../../utils/storage'
+import {exportIdeas} from "../../utils/export";
 
 const props = defineProps<{ ideas: Idea[] }>()
 const emit = defineEmits(["update:ideas"]) // 通知父组件更新
