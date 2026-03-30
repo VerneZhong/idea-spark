@@ -1,5 +1,18 @@
-# Vue 3 + TypeScript + Vite
+# Idea Spark
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Project Description
+Idea Spark is an innovative application designed to facilitate the generation and organization of ideas. This project aims to provide users with a seamless and efficient platform to brainstorm and categorize their thoughts.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Features
+- **User-Friendly Interface**: Intuitive UI for easy navigation.
+- **Idea Categorization**: Create, edit, and categorize ideas with tags.
+- **Search Functionality**: Quickly search for specific ideas.
+- **Collaboration Tools**: Share ideas with others and collaborate in real-time.
+- **Export Options**: Export ideas in various formats for presentations and reports.
+
+## Setup Instructions
+To set up the project locally, follow these instructions:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/VerneZhong/idea-spark.git
